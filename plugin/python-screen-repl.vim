@@ -49,6 +49,6 @@ endfunction
 
 command! SetupScreenRepl call s:LineToScreen('cd '.expand('%:p:h')) | exec ':redraw!'
 " Opens a terminal and starts screen
-command! OpenScreenRepl exec ':!$TERMINAL -e screen -S '.s:screenname.' &' | exec ':SetupScreenRepl!'
+command! OpenScreenRepl exec ':!$TERMINAL -e screen -DR -S '.s:screenname.' &' | exec ':SetupScreenRepl!'
 command! -range -nargs=1 ScreenReplExec <line1>,<line2>call s:ReplExecFun(<f-args>) | exec ':redraw!'
 
