@@ -56,7 +56,7 @@ function! s:ReplExecFun(mode) range
 
     if &filetype == 'python'
         call s:LinesToIPython(l:selection)
-    elseif &filetype == 'python'
+    elseif &filetype == 'sql'
         call s:LinesToSql(l:selection)
     else 
         call s:rawLinesToScreen(l:selection)
