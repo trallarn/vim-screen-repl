@@ -1,10 +1,8 @@
 
-let s:screenname = 'vim_repl'
-
 ""
 " Sends one line to screen
 function! s:LineToScreen(line)
-    exec ':silent! :!screen -x '.s:screenname.' -X stuff "'.a:line.'"'
+    exec ':silent! :!screen -x '.g:vim_screen_screenname.' -X stuff "'.a:line.'"'
 endfunction
 
 ""
@@ -67,6 +65,8 @@ endfunction
 
 command! SetupScreenRepl call s:LineToScreen('cd '.expand('%:p:h')) | exec ':redraw!'
 " Opens a terminal and starts screen
-command! OpenScreenRepl exec ':!$TERMINAL -e screen -DR -S '.s:screenname.' &' | exec ':SetupScreenRepl!'
+command! OpenScreenRepl exec ':!$TERMINAL -e screen -DR -S '.g:vim_screen_screenname.' &' | exec ':SetupScreenRepl!'
 command! -range -nargs=1 ScreenReplExec <line1>,<line2>call s:ReplExecFun(<f-args>) | exec ':redraw!'
 
+" Settings
+let g:vim_screen_screenname = get(g:, 'vim_screen_screenname ', "vim_screen_repl_default")
