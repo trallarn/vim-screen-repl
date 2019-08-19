@@ -4,17 +4,29 @@ let s:screenname = 'vim_repl'
 ""
 " Sends one line to screen
 function! s:LineToScreen(line)
-    exec ':silent! :!screen -x '.s:screenname.' -X stuff "'.a:line.'\n"'
+    exec ':silent! :!screen -x '.s:screenname.' -X stuff "'.a:line.'"'
 endfunction
 
 ""
-" Sends lines to screen
+" Sends lines to ipython in screen
 function! s:LinesToIPython(lines)
     call s:LineToScreen(escape('%cpaste', '%'))
-    for line in a:lines
-        call s:LineToScreen(escape(l:line, '^#"!'))
-    endfor
+    let joined = join(a:lines, "")
+    call s:LineToScreen(escape(l:joined, '^#"!'))
     call s:LineToScreen("--")
+endfunction
+
+" Sends lines raw to mysql
+function! s:LinesToSql(lines)
+    let joined = join(a:lines, "")
+    let escaped = escape(l:joined, "`")
+    call s:LineToScreen(l:escaped)
+endfunction
+
+" Sends lines to screen
+function! s:rawLinesToScreen(lines)
+    let joined = join(a:lines, "")
+    call s:LineToScreen(l:joined)
 endfunction
 
 ""
@@ -44,7 +56,13 @@ function! s:ReplExecFun(mode) range
         throw "Supported modes: [n, v]. Invalid mode: " a:mode
     endif
 
-    call s:LinesToIPython(l:selection)
+    if &filetype == 'python'
+        call s:LinesToIPython(l:selection)
+    elseif &filetype == 'python'
+        call s:LinesToSql(l:selection)
+    else 
+        call s:rawLinesToScreen(l:selection)
+    endif
 endfunction
 
 command! SetupScreenRepl call s:LineToScreen('cd '.expand('%:p:h')) | exec ':redraw!'
