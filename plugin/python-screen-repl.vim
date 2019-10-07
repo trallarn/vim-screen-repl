@@ -54,9 +54,15 @@ function! s:ReplExecFun(mode) range
         throw "Supported modes: [n, v]. Invalid mode: " a:mode
     endif
 
-    if &filetype == 'python'
+    let outputtype = &filetype
+
+    if g:vim_screen_output != ''
+        let outputtype = g:vim_screen_output
+    endif
+
+    if l:outputtype == 'python'
         call s:LinesToIPython(l:selection)
-    elseif &filetype == 'sql'
+    elseif l:outputtype == 'sql'
         call s:LinesToSql(l:selection)
     else 
         call s:rawLinesToScreen(l:selection)
@@ -70,3 +76,5 @@ command! -range -nargs=1 ScreenReplExec <line1>,<line2>call s:ReplExecFun(<f-arg
 
 " Settings
 let g:vim_screen_screenname = get(g:, 'vim_screen_screenname ', "vim_screen_repl_default")
+""" Override filetype base output
+let g:vim_screen_output = get(g:, 'vim_screen_output  ', '')
