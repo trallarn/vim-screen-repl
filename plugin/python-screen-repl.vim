@@ -24,7 +24,8 @@ endfunction
 " Sends lines to screen
 function! s:rawLinesToScreen(lines)
     let joined = join(a:lines, "")
-    call s:LineToScreen(l:joined)
+    let escaped = escape(l:joined, "#\"%")
+    call s:LineToScreen(l:escaped)
 endfunction
 
 ""
