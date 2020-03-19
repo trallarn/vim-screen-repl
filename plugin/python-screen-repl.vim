@@ -14,6 +14,14 @@ function! s:LinesToIPython(lines)
     call s:LineToScreen("--")
 endfunction
 
+" Sends lines to raw python repl
+function! s:LinesToRawPython(lines)
+    let lines = map(a:lines, 'trim(v:val)') " Trims string since repl cares about indents
+    let joined = join(l:lines, "")
+    let escaped = escape(l:joined, "#\"%")
+    call s:LineToScreen(l:escaped)
+endfunction
+
 " Sends lines raw to mysql
 function! s:LinesToSql(lines)
     let joined = join(a:lines, "")
@@ -63,6 +71,8 @@ function! s:ReplExecFun(mode) range
 
     if l:outputtype == 'python'
         call s:LinesToIPython(l:selection)
+    elseif l:outputtype == 'rawpython'
+        call s:LinesToRawPython(l:selection)
     elseif l:outputtype == 'sql'
         call s:LinesToSql(l:selection)
     else 
