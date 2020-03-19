@@ -10,14 +10,14 @@ endfunction
 function! s:LinesToIPython(lines)
     call s:LineToScreen(escape('%cpaste', '%'))
     let joined = join(a:lines, "")
-    call s:LineToScreen(escape(l:joined, '^#"!'))
+    call s:LineToScreen(escape(l:joined, '^#"!%'))
     call s:LineToScreen("--")
 endfunction
 
 " Sends lines raw to mysql
 function! s:LinesToSql(lines)
     let joined = join(a:lines, "")
-    let escaped = escape(l:joined, "`")
+    let escaped = escape(l:joined, "`%")
     call s:LineToScreen(l:escaped)
 endfunction
 
